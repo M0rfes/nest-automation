@@ -5,9 +5,7 @@ import * as path from 'path';
 export class AppService {
   async getHello() {
     const browser = await playwright.chromium.launch({
-      headless: false,
-      slowMo: 1000 * 0.5,
-      args: ['--start-maximized'],
+      headless: true,
     });
     try {
       const context = await browser.newContext();
