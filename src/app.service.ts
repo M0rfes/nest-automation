@@ -65,29 +65,26 @@ export class AppService {
         .locator(`[aria-label="Detail Masalah (Problem Details)"]`)
         .fill('John Doe John Doe John Doe John Doe John Doe John Doe');
 
-      let fileChooserPromise = page.waitForEvent('filechooser');
-      await page.locator(`[name="link_barang_banyak"]`).click({ force: true });
-      let fileChooser = await fileChooserPromise;
-      await fileChooser.setFiles(path.join(__dirname, '..', 'ss.png'));
-
-      fileChooserPromise = page.waitForEvent('filechooser');
-      await page
-        .locator(`[name="surat_kepemilikan_merek"]`)
-        .click({ force: true });
-      fileChooser = await fileChooserPromise;
-      await fileChooser.setFiles(path.join(__dirname, '..', 'ss.png'));
-
-      fileChooserPromise = page.waitForEvent('filechooser');
-      await page.locator(`[name="bukti_surat_kuasa"]`).click({ force: true });
-      fileChooser = await fileChooserPromise;
-      await fileChooser.setFiles(path.join(__dirname, '..', 'ss.png'));
-
-      fileChooserPromise = page.waitForEvent('filechooser');
-      await page
-        .locator(`[name="bukti_surat_izin_usaha"]`)
-        .click({ force: true });
-      fileChooser = await fileChooserPromise;
-      await fileChooser.setFiles(path.join(__dirname, '..', 'ss.png'));
+      await this.uploadFile(
+        page,
+        `[name="link_barang_banyak"]`,
+        path.join(__dirname, '..', 'ss.png'),
+      );
+      await this.uploadFile(
+        page,
+        `[name="surat_kepemilikan_merek"]`,
+        path.join(__dirname, '..', 'ss.png'),
+      );
+      await this.uploadFile(
+        page,
+        `[name="bukti_surat_kuasa"]`,
+        path.join(__dirname, '..', 'ss.png'),
+      );
+      await this.uploadFile(
+        page,
+        `[name="bukti_surat_izin_usaha"]`,
+        path.join(__dirname, '..', 'ss.png'),
+      );
 
       await page.locator(`[value="isTncChecked"]`).click();
 
@@ -103,5 +100,12 @@ export class AppService {
     } finally {
       browser.close();
     }
+  }
+
+  private async uploadFile(page: playwright.Page, input: string, file: string) {
+    const fileChooserPromise = page.waitForEvent('filechooser');
+    await page.locator(input).click({ force: true });
+    let fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles(file);
   }
 }
